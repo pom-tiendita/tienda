@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda Pom - Catálogo</title>
+    <style>
+        /* Paleta de colores cálida integrada */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #FAF5F0;
+            color: #4A3E3D;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Encabezado */
+        header {
+            background-color: #D87A7A;
+            color: #FFFFFF;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 20px;
+            object-fit: cover;
+            margin-bottom: 15px;
+            background-color: #FFFFFF; 
+            box-shadow: 0 4px 8px rgba(74, 62, 61, 0.15);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            letter-spacing: 2px;
+        }
+        header p {
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+
+        /* Navegación */
+        nav {
+            background-color: #F4B6C2;
+            padding: 15px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(74, 62, 61, 0.05);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #4A3E3D;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: color 0.3s;
+            padding: 0 10px;
+        }
+        nav a:hover {
+            color: #FFFFFF;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+        
+        .section-title {
+            color: #D87A7A;
+            border-bottom: 3px solid #F4B6C2;
+            padding-bottom: 10px;
+            margin-top: 50px;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        /* Caja General de Características (Sin precios) */
+        .global-info-box {
+            background-color: #FFFFFF;
+            border: 2px solid #F4B6C2;
+            border-radius: 12px;
+            padding: 40px;
+            margin-top: 40px;
+            margin-bottom: 50px;
+            box-shadow: 0 4px 15px rgba(74, 62, 61, 0.08);
+        }
+        .global-features h2 {
+            color: #D87A7A;
+            margin-top: 0;
+            font-size: 1.8em;
+            text-align: center;
+        }
+        .global-features p {
+            font-size: 1.1em;
+            color: #6E5E5C;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .global-features ul {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #4A3E3D;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .global-features ul li {
+            margin-bottom: 8px;
+        }
+        .combo-note {
+            background-color: #FFE6E6;
+            color: #D87A7A;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1em;
+            margin-top: 20px;
+        }
+        
+        /* Tarjeta de Producto */
+        .product-card {
+            display: flex;
+            background: #FFFFFF;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(74, 62, 61, 0.08);
+        }
+        
+        .product-image-grid {
+            flex: 0 0 50%; 
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 12px;
+            padding: 20px;
+            background-color: #FFFFFF;
+            box-sizing: border-box;
+        }
+        
+        .img-wrapper {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            aspect-ratio: 1 / 1;
+            background-color: #FAF5F0; 
+            transition: transform 0.4s ease;
+        }
+        .img-wrapper:hover img {
+            transform: scale(1.15);
+        }
+
+        .product-details {
+            flex: 0 0 50%;
+            padding: 30px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+        .product-details h3 {
+            margin-top: 0;
+            color: #D87A7A;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+        .product-details p {
+            font-size: 1.1em;
+            line-height: 1.5;
+            color: #4A3E3D;
+            margin-bottom: 20px;
+            margin-top: 0;
+        }
+
+        /* Precios por Producto */
+        .product-pricing {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+        .product-price-item {
+            background-color: #FAF5F0;
+            border-left: 4px solid #D87A7A;
+            padding: 10px 15px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #4A3E3D;
+            font-weight: bold;
+            font-size: 1.05em;
+        }
+        .product-price-item span {
+            font-weight: normal;
+            color: #6E5E5C;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #D87A7A;
+            color: #FFFFFF;
+            padding: 15px 25px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            width: fit-content;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background-color: #C86B6B;
+        }
+
+        /* Sección Por qué elegirnos */
+        .why-us-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        .why-card {
+            background-color: #FFFFFF;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(74, 62, 61, 0.05);
+            border-top: 5px solid #F4B6C2;
+        }
+        .why-card h4 {
+            color: #D87A7A;
+            font-size: 1.3em;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .why-card p {
+            color: #6E5E5C;
+            line-height: 1.6;
+            font-size: 1.05em;
+            margin: 0;
+        }
+        
+        /* Sección de Envíos y Pagos */
+        .info-cards {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .info-card {
+            background-color: #FFFFFF;
+            border: 2px solid #FFE6E6;
+            border-radius: 12px;
+            padding: 25px;
+            flex: 1;
+            box-shadow: 0 2px 8px rgba(74, 62, 61, 0.05);
+        }
+        .info-card h4 {
+            color: #D87A7A;
+            font-size: 1.4em;
+            margin-top: 0;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .info-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .info-card li {
+            margin-bottom: 12px;
+            font-size: 1.05em;
+            color: #6E5E5C; 
+            line-height: 1.5;
+        }
+        .info-card li strong {
+            color: #4A3E3D;
+        }
+        
+        /* Banner inferior de contacto */
+        .contact-banner {
+            background-color: #FFE6E6;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            color: #4A3E3D;
+        }
+        .contact-banner h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.3em;
+            color: #D87A7A;
+        }
+        .contact-banner p {
+            margin: 5px 0;
+            font-size: 1.1em;
+        }
+        .contact-banner strong {
+            font-weight: bold;
+            color: #D87A7A;
+        }
+
+        /* Estilos del Modal Lightbox / Slider */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .lightbox.active {
+            display: flex;
+        }
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+            object-fit: contain;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: -45px;
+            right: 0;
+            color: #FFFFFF;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            background: none;
+            border: none;
+            line-height: 1;
+        }
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(216, 122, 122, 0.9);
+            color: white;
+            border: none;
+            font-size: 24px;
+            padding: 12px 18px;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background 0.3s, transform 0.2s;
+            user-select: none;
+        }
+        .lightbox-nav:hover {
+            background: #C86B6B;
+            transform: translateY(-50%) scale(1.1);
+        }
+        .lightbox-prev { left: -65px; }
+        .lightbox-next { right: -65px; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .product-card {
+                flex-direction: column;
+            }
+            .product-image-grid, .product-details {
+                flex: 0 0 100%;
+            }
+            .product-image-grid {
+                padding: 15px;
+            }
+            .product-details {
+                padding: 20px 25px 30px 25px;
+            }
+            .info-cards {
+                flex-direction: column;
+            }
+            .lightbox-prev { left: 10px; }
+            .lightbox-next { right: 10px; }
+            .lightbox-close { top: -45px; right: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="logo/logo.jpg" alt="Logo Pom" class="logo">
+        <h1>Pom</h1>
+    </header>
+
+    <nav>
+        <a href="#info">Info</a>
+        <a href="#catalogo">Catálogo</a>
+        <a href="#nosotros">Nosotros</a>
+        <a href="#envios">Envíos y Pagos</a>
+    </nav>
+
+    <div class="container">
+        
+        <!-- CAJA: Información General (Sin listado de precios) -->
+        <div id="info" class="global-info-box">
+            <div class="global-features">
+                <h2>Información de nuestros cortadores</h2>
+                <p>Todos nuestros productos están diseñados pensando en la mejor experiencia de repostería:</p>
+                <ul>
+                    <li><strong>Diseño Propio y Exclusivo</strong></li>
+                    <li><strong>Material Eco-Friendly y Biodegradable</strong></li>
+                    <li><strong>100% Producción Propia</strong></li>
+                    <li><strong>Multiuso y Versátil</strong></li>
+                </ul>
+                <div class="combo-note">💡 Podés armar tus kits combinando diseños dentro de cada temática del catálogo.</div>
+            </div>
+        </div>
+
+        <h2 id="catalogo" class="section-title">Catálogo / Repostería Creativa</h2>
+
+        <!-- PRODUCTO 1: HARRY POTTER -->
+        <div class="product-card">
+            <div class="product-image-grid">
+                <div class="img-wrapper"><img src="harry_poter/img1.jpg" alt="Cortador Harry Potter"></div>
+                <div class="img-wrapper"><img src="harry_poter/img2.jpg" alt="Cortador Harry Potter"></div>
+                <div class="img-wrapper"><img src="harry_poter/img3.jpg" alt="Cortador Harry Potter"></div>
+                <div class="img-wrapper"><img src="harry_poter/img4.jpg" alt="Cortador Harry Potter"></div>
+            </div>
+            <div class="product-details">
+                <h3 class="product-title">Mundo Mágico - Harry Potter</h3>
+                <p>Lleva la magia de Hogwarts directamente a tu cocina. Sorprende a los más fanáticos con galletas encantadas de sus casas y símbolos favoritos. Un set imprescindible para cualquier mago pastelero.</p>
+                
+                <div class="product-pricing">
+                    <div class="product-price-item"><span>1 a 3 unidades:</span> $3.470 ARS c/u</div>
+                    <div class="product-price-item"><span>Kit de 4 unidades:</span> $8.419 ARS</div>
+                    <div class="product-price-item"><span>Kit de 8 unidades:</span> $15.347 ARS</div>
+                    <div class="product-price-item"><span>Kit de 12 unidades:</span> $21.286 ARS</div>
+                </div>
+
+                <a href="#" class="btn btn-whatsapp">Armar pedido por WhatsApp</a>
+            </div>
+        </div>
+
+        <!-- PRODUCTO 2: ANIMALES DEL BOSQUE -->
+        <div class="product-card">
+            <div class="product-image-grid">
+                <div class="img-wrapper"><img src="animales_bosque/img1.png" alt="Cortador Animales Bosque"></div>
+                <div class="img-wrapper"><img src="animales_bosque/img2.png" alt="Cortador Animales Bosque"></div>
+                <div class="img-wrapper"><img src="animales_bosque/img3.png" alt="Cortador Animales Bosque"></div>
+                <div class="img-wrapper"><img src="animales_bosque/img7.png" alt="Cortador Animales Bosque"></div>
+            </div>
+            <div class="product-details">
+                <h3 class="product-title">Ternura Natural - Animales del Bosque</h3>
+                <p>Crea las galletas más adorables con nuestro set rústico. Zorritos, osos y mapaches listos para darle un toque encantador y silvestre a tus mesas dulces. Ideales para temáticas "Woodland".</p>
+                
+                <div class="product-pricing">
+                    <div class="product-price-item"><span>1 a 3 unidades:</span> $2.615 ARS c/u</div>
+                    <div class="product-price-item"><span>Kit de 4 unidades:</span> $6.138 ARS</div>
+                    <div class="product-price-item"><span>Kit de 8 unidades:</span> $11.072 ARS</div>
+                    <div class="product-price-item"><span>Kit de 12 unidades:</span> $15.300 ARS</div>
+                </div>
+
+                <a href="#" class="btn btn-whatsapp">Armar pedido por WhatsApp</a>
+            </div>
+        </div>
+
+        <!-- PRODUCTO 3: ANIMALES DE LA SABANA -->
+        <div class="product-card">
+            <div class="product-image-grid">
+                <div class="img-wrapper"><img src="animales_savana/img1.jpg" alt="Cortador Sabana"></div>
+                <div class="img-wrapper"><img src="animales_savana/img2.jpg" alt="Cortador Sabana"></div>
+                <div class="img-wrapper"><img src="animales_savana/img3.jpg" alt="Cortador Sabana"></div>
+                <div class="img-wrapper"><img src="animales_savana/img7.jpg" alt="Cortador Sabana"></div>
+            </div>
+            <div class="product-details">
+                <h3 class="product-title">Aventura Safari - Animales de la Sabana</h3>
+                <p>¡Un safari de sabor! Sorprende a los más chicos con leones valientes, elefantes y jirafas. La opción perfecta para cumpleaños llenos de aventura, selva y mucha diversión.</p>
+                
+                <div class="product-pricing">
+                    <div class="product-price-item"><span>1 a 3 unidades:</span> $3.087 ARS c/u</div>
+                    <div class="product-price-item"><span>Kit de 4 unidades:</span> $7.398 ARS</div>
+                    <div class="product-price-item"><span>Kit de 8 unidades:</span> $13.434 ARS</div>
+                    <div class="product-price-item"><span>Kit de 12 unidades:</span> $18.607 ARS</div>
+                </div>
+
+                <a href="#" class="btn btn-whatsapp">Armar pedido por WhatsApp</a>
+            </div>
+        </div>
+
+        <!-- PRODUCTO 4: BABY SHOWER -->
+        <div class="product-card">
+            <div class="product-image-grid">
+                <div class="img-wrapper"><img src="baby_shower/img1.jpg" alt="Cortador Baby Shower"></div>
+                <div class="img-wrapper"><img src="baby_shower/img2.jpg" alt="Cortador Baby Shower"></div>
+                <div class="img-wrapper"><img src="baby_shower/img3.jpg" alt="Cortador Baby Shower"></div>
+                <div class="img-wrapper"><img src="baby_shower/img4.jpg" alt="Cortador Baby Shower"></div>
+            </div>
+            <div class="product-details">
+                <h3 class="product-title">Dulce Espera - Baby Shower</h3>
+                <p>Celebra la llegada de un nuevo integrante con diseños delicados y súper tiernos. Chupones, carritos, bodys y ositos pensados para hacer de ese evento un recuerdo dulce e inolvidable.</p>
+                
+                <div class="product-pricing">
+                    <div class="product-price-item"><span>1 a 3 unidades:</span> $3.387 ARS c/u</div>
+                    <div class="product-price-item"><span>Kit de 4 unidades:</span> $8.199 ARS</div>
+                    <div class="product-price-item"><span>Kit de 8 unidades:</span> $14.935 ARS</div>
+                    <div class="product-price-item"><span>Kit de 12 unidades:</span> $20.709 ARS</div>
+                </div>
+
+                <a href="#" class="btn btn-whatsapp">Armar pedido por WhatsApp</a>
+            </div>
+        </div>
+
+        <!-- PRODUCTO 5: CUMPLEAÑOS -->
+        <div class="product-card">
+            <div class="product-image-grid">
+                <div class="img-wrapper"><img src="cumple/img1.jpg" alt="Cortador Cumpleaños"></div>
+                <div class="img-wrapper"><img src="cumple/img2.jpg" alt="Cortador Cumpleaños"></div>
+                <div class="img-wrapper"><img src="cumple/img3.jpg" alt="Cortador Cumpleaños"></div>
+                <div class="img-wrapper"><img src="cumple/img4.jpg" alt="Cortador Cumpleaños"></div>
+            </div>
+            <div class="product-details">
+                <h3 class="product-title">Fiesta Total - Cumpleaños</h3>
+                <p>¡Que la celebración empiece por el paladar! Globos, pasteles, regalos y bonetes para festejar a lo grande. Este set es el comodín infaltable que todo pastelero necesita tener en su taller.</p>
+                
+                <div class="product-pricing">
+                    <div class="product-price-item"><span>1 a 3 unidades:</span> $2.786 ARS c/u</div>
+                    <div class="product-price-item"><span>Kit de 4 unidades:</span> $6.596 ARS</div>
+                    <div class="product-price-item"><span>Kit de 8 unidades:</span> $11.930 ARS</div>
+                    <div class="product-price-item"><span>Kit de 12 unidades:</span> $16.502 ARS</div>
+                </div>
+
+                <a href="#" class="btn btn-whatsapp">Armar pedido por WhatsApp</a>
+            </div>
+        </div>
+
+        <!-- PRODUCTO 6: DEMON HUNTERS -->
+        <div class="product-card">
+            <div class="product-image-grid">
+                <div class="img-wrapper"><img src="deamon_hunters/img1.jpg" alt="Cortador Demon Hunters"></div>
+                <div class="img-wrapper"><img src="deamon_hunters/img2.jpg" alt="Cortador Demon Hunters"></div>
+                <div class="img-wrapper"><img src="deamon_hunters/img3.jpg" alt="Cortador Demon Hunters"></div>
+                <div class="img-wrapper"><img src="deamon_hunters/img4.jpg" alt="Cortador Demon Hunters"></div>
+            </div>
+            <div class="product-details">
+                <h3 class="product-title">Anime & Acción - Cazadores de Demonios</h3>
+                <p>Para los verdaderos fanáticos del anime. Recrea a tus personajes favoritos con un nivel de detalle increíble. Perfectos para pintar sobre fondant o glasé y dejar a todos con la boca abierta.</p>
+                
+                <div class="product-pricing">
+                    <div class="product-price-item"><span>1 a 3 unidades:</span> $3.508 ARS c/u</div>
+                    <div class="product-price-item"><span>Kit de 4 unidades:</span> $8.520 ARS</div>
+                    <div class="product-price-item"><span>Kit de 8 unidades:</span> $15.538 ARS</div>
+                    <div class="product-price-item"><span>Kit de 12 unidades:</span> $21.553 ARS</div>
+                </div>
+
+                <a href="#" class="btn btn-whatsapp">Armar pedido por WhatsApp</a>
+            </div>
+        </div>
+
+        <!-- PRODUCTO 7: FLORES -->
+        <div class="product-card">
+            <div class="product-image-grid">
+                <div class="img-wrapper"><img src="flores/img1.jpg" alt="Cortador Flores"></div>
+                <div class="img-wrapper"><img src="flores/img2.jpg" alt="Cortador Flores"></div>
+                <div class="img-wrapper"><img src="flores/img3.jpg" alt="Cortador Flores"></div>
+                <div class="img-wrapper"><img src="flores/img4.jpg" alt="Cortador Flores"></div>
+            </div>
+            <div class="product-details">
+                <h3 class="product-title">Jardín Botánico - Set de Flores</h3>
+                <p>Dale un toque primaveral, sofisticado y muy elegante a tus creaciones. Una delicada selección de siluetas florales, ideales para eventos románticos, bodas, comuniones o el Día de la Madre.</p>
+                
+                <div class="product-pricing">
+                    <div class="product-price-item"><span>1 a 3 unidades:</span> $3.599 ARS c/u</div>
+                    <div class="product-price-item"><span>Kit de 4 unidades:</span> $8.764 ARS</div>
+                    <div class="product-price-item"><span>Kit de 8 unidades:</span> $15.995 ARS</div>
+                    <div class="product-price-item"><span>Kit de 12 unidades:</span> $22.193 ARS</div>
+                </div>
+
+                <a href="#" class="btn btn-whatsapp">Armar pedido por WhatsApp</a>
+            </div>
+        </div>
+
+        <!-- PRODUCTO 8: HALLOWEEN -->
+        <div class="product-card">
+            <div class="product-image-grid">
+                <div class="img-wrapper"><img src="haloween/img1.png" alt="Cortador Halloween"></div>
+                <div class="img-wrapper"><img src="haloween/img2.png" alt="Cortador Halloween"></div>
+                <div class="img-wrapper"><img src="haloween/img3.png" alt="Cortador Halloween"></div>
+                <div class="img-wrapper"><img src="haloween/img9.png" alt="Cortador Halloween"></div>
+            </div>
+            <div class="product-details">
+                <h3 class="product-title">Dulce o Truco - Especial Halloween</h3>
+                <p>Prepara las galletas más espeluznantes y divertidas de la temporada. Calabazas sonrientes, fantasmas curiosos y murciélagos listos para protagonizar la Noche de Brujas más rica de todas.</p>
+                
+                <div class="product-pricing">
+                    <div class="product-price-item"><span>1 a 3 unidades:</span> $3.243 ARS c/u</div>
+                    <div class="product-price-item"><span>Kit de 4 unidades:</span> $7.814 ARS</div>
+                    <div class="product-price-item"><span>Kit de 8 unidades:</span> $14.213 ARS</div>
+                    <div class="product-price-item"><span>Kit de 12 unidades:</span> $19.698 ARS</div>
+                </div>
+
+                <a href="#" class="btn btn-whatsapp">Armar pedido por WhatsApp</a>
+            </div>
+        </div>
+
+        <!-- PRODUCTO 9: HELLO KITTY -->
+        <div class="product-card">
+            <div class="product-image-grid">
+                <div class="img-wrapper"><img src="kitty/img1.jpg" alt="Cortador Kitty"></div>
+                <div class="img-wrapper"><img src="kitty/img2.jpg" alt="Cortador Kitty"></div>
+                <div class="img-wrapper"><img src="kitty/img12.png" alt="Cortador Kitty"></div>
+                <div class="img-wrapper"><img src="kitty/img13.png" alt="Cortador Kitty"></div>
+            </div>
+            <div class="product-details">
+                <h3 class="product-title">Estilo Kawaii - Gatita Kitty</h3>
+                <p>La gatita más famosa y encantadora llega a tu repostería. Diseños súper detallados que enamorarán a grandes nostálgicos y a los más chicos por igual. ¡Imposible resistirse a tanta ternura!</p>
+                
+                <div class="product-pricing">
+                    <div class="product-price-item"><span>1 a 3 unidades:</span> $2.686 ARS c/u</div>
+                    <div class="product-price-item"><span>Kit de 4 unidades:</span> $6.329 ARS</div>
+                    <div class="product-price-item"><span>Kit de 8 unidades:</span> $11.428 ARS</div>
+                    <div class="product-price-item"><span>Kit de 12 unidades:</span> $15.799 ARS</div>
+                </div>
+
+                <a href="#" class="btn btn-whatsapp">Armar pedido por WhatsApp</a>
+            </div>
+        </div>
+
+        <!-- PRODUCTO 10: MICKEY -->
+        <div class="product-card">
+            <div class="product-image-grid">
+                <div class="img-wrapper"><img src="mickey/img1.jpg" alt="Cortador Mickey"></div>
+                <div class="img-wrapper"><img src="mickey/img2.jpg" alt="Cortador Mickey"></div>
+                <div class="img-wrapper"><img src="mickey/img3.jpg" alt="Cortador Mickey"></div>
+                <div class="img-wrapper"><img src="mickey/img4.jpg" alt="Cortador Mickey"></div>
+            </div>
+            <div class="product-details">
+                <h3 class="product-title">Clásico Inolvidable - Siluetas Mickey</h3>
+                <p>El ratón más querido del mundo es una apuesta segura que nunca pasa de moda. Agrega la magia de los clásicos animados a tus mesas dulces con estas siluetas icónicas y divertidas.</p>
+                
+                <div class="product-pricing">
+                    <div class="product-price-item"><span>1 a 3 unidades:</span> $3.479 ARS c/u</div>
+                    <div class="product-price-item"><span>Kit de 4 unidades:</span> $8.444 ARS</div>
+                    <div class="product-price-item"><span>Kit de 8 unidades:</span> $15.394 ARS</div>
+                    <div class="product-price-item"><span>Kit de 12 unidades:</span> $21.351 ARS</div>
+                </div>
+
+                <a href="#" class="btn btn-whatsapp">Armar pedido por WhatsApp</a>
+            </div>
+        </div>
+
+        <!-- PRODUCTO 11: PERRITOS -->
+        <div class="product-card">
+            <div class="product-image-grid">
+                <div class="img-wrapper"><img src="perritos/img1.jpg" alt="Cortador Perritos"></div>
+                <div class="img-wrapper"><img src="perritos/img2.jpg" alt="Cortador Perritos"></div>
+                <div class="img-wrapper"><img src="perritos/img3.jpg" alt="Cortador Perritos"></div>
+                <div class="img-wrapper"><img src="perritos/img4.jpg" alt="Cortador Perritos"></div>
+            </div>
+            <div class="product-details">
+                <h3 class="product-title">Amor Peludo - Perritos</h3>
+                <p>Para los verdaderos dog-lovers. Huellitas, huesitos y las caritas de los perritos más simpáticos. Ideales para armar bandejas temáticas o incluso para festejar el cumple de tu mejor amigo de cuatro patas.</p>
+                
+                <div class="product-pricing">
+                    <div class="product-price-item"><span>1 a 3 unidades:</span> $3.824 ARS c/u</div>
+                    <div class="product-price-item"><span>Kit de 4 unidades:</span> $9.364 ARS</div>
+                    <div class="product-price-item"><span>Kit de 8 unidades:</span> $17.120 ARS</div>
+                    <div class="product-price-item"><span>Kit de 12 unidades:</span> $23.768 ARS</div>
+                </div>
+
+                <a href="#" class="btn btn-whatsapp">Armar pedido por WhatsApp</a>
+            </div>
+        </div>
+
+        <!-- PRODUCTO 12: FIVE NIGHTS -->
+        <div class="product-card">
+            <div class="product-image-grid">
+                <div class="img-wrapper"><img src="five_nights/img1.png" alt="Cortador Five Nights at Freddys"></div>
+                <div class="img-wrapper"><img src="five_nights/img1.png" alt="Cortador Five Nights at Freddys"></div>
+                <div class="img-wrapper"><img src="five_nights/img1.png" alt="Cortador Five Nights at Freddys"></div>
+                <div class="img-wrapper"><img src="five_nights/img1.png" alt="Cortador Five Nights at Freddys"></div>
+            </div>
+            <div class="product-details">
+                <h3 class="product-title">Susto Delicioso - Especial Five Nights at Freddys</h3>
+                <p>Lleva el misterio y la emoción de la pizzería más famosa directamente a tu cocina. Crea galletas increíbles con las siluetas de Freddy y sus compañeros animatrónicos; perfectas para sorprender a los fanáticos de este universo en cumples y tardes de videojuegos.</p>
+
+                <div class="product-pricing">
+                    <div class="product-price-item"><span>1 a 3 unidades:</span> $4.057 ARS c/u</div>
+                    <div class="product-price-item"><span>Kit de 4 unidades:</span> $9.983 ARS</div>
+                    <div class="product-price-item"><span>Kit de 8 unidades:</span> $18.281 ARS</div>
+                    <div class="product-price-item"><span>Kit de 12 unidades:</span> $25.393 ARS</div>
+                </div>
+
+                <a href="#" class="btn btn-whatsapp">Armar pedido por WhatsApp</a>
+            </div>
+        </div>
+
+        <!-- PRODUCTO 13: OTOÑO -->
+        <div class="product-card">
+            <div class="product-image-grid">
+                <div class="img-wrapper"><img src="otoño/img1.png" alt="Cortador Otoño"></div>
+                <div class="img-wrapper"><img src="otoño/img1.png" alt="Cortador Otoño"></div>
+                <div class="img-wrapper"><img src="otoño/img1.png" alt="Cortador Otoño"></div>
+                <div class="img-wrapper"><img src="otoño/img1.png" alt="Cortador Otoño"></div>
+            </div>
+            <div class="product-details">
+                <h3 class="product-title">Calidez Otoñal - Hojas y Bellotas</h3>
+                <p>Inspirado en los días acogedores, las tardes de té y los colores dorados de la temporada. Transforma tus galletas en hojas secas, calabazas rústicas y bellotas que le darán un toque súper estético, tierno y elegante a cualquier mesa dulce.</p>
+
+                <div class="product-pricing">
+                    <div class="product-price-item"><span>1 a 3 unidades:</span> $3.824 ARS c/u</div>
+                    <div class="product-price-item"><span>Kit de 4 unidades:</span> $9.364 ARS</div>
+                    <div class="product-price-item"><span>Kit de 8 unidades:</span> $17.120 ARS</div>
+                    <div class="product-price-item"><span>Kit de 12 unidades:</span> $23.768 ARS</div>
+                </div>
+
+                <a href="#" class="btn btn-whatsapp">Armar pedido por WhatsApp</a>
+            </div>
+        </div>
+
+        <!-- PRODUCTO 14: POKEMON -->
+        <div class="product-card">
+            <div class="product-image-grid">
+                <div class="img-wrapper"><img src="pokemon/img1.png" alt="Cortador Pokemon"></div>
+                <div class="img-wrapper"><img src="pokemon/img2.png" alt="Cortador Pokemon"></div>
+                <div class="img-wrapper"><img src="pokemon/img1.png" alt="Cortador Pokemon"></div>
+                <div class="img-wrapper"><img src="pokemon/img2.png" alt="Cortador Pokemon"></div>
+            </div>
+            <div class="product-details">
+                <h3 class="product-title">¡Atrápalos a Todos! - Aventura Pokémon</h3>
+                <p>Conviértete en un maestro pastelero con las siluetas de tus criaturas favoritas y la icónica Pokebóla. Un set lleno de nostalgia y diversión, ideal para asegurar el éxito en fiestas infantiles, eventos temáticos o para revivir la infancia en cada bocado.</p>
+
+                <div class="product-pricing">
+                    <div class="product-price-item"><span>1 a 3 unidades:</span> $3.512 ARS c/u</div>
+                    <div class="product-price-item"><span>Kit de 4 unidades:</span> $8.531 ARS</div>
+                    <div class="product-price-item"><span>Kit de 8 unidades:</span> $15.558 ARS</div>
+                    <div class="product-price-item"><span>Kit de 12 unidades:</span> $21.580 ARS</div>
+                </div>
+
+                <a href="#" class="btn btn-whatsapp">Armar pedido por WhatsApp</a>
+            </div>
+        </div>
+
+        <!-- SECCIÓN: Por qué elegirnos -->
+        <h2 id="nosotros" class="section-title">¿Por qué elegir nuestros cortadores?</h2>
+        
+        <div class="why-us-grid">
+            <div class="why-card">
+                <h4>✨ Diseño Propio y Exclusivo</h4>
+                <p>Desarrollados desde cero y optimizados minuciosamente para lograr un corte limpio y un estampado definido, evitando que la masa se pegue o pierda forma al desmoldar.</p>
+            </div>
+            <div class="why-card">
+                <h4>🌱 Material Eco-Friendly</h4>
+                <p>Fabricados en PLA (ácido poliláctico), un plástico de origen vegetal derivado de recursos renovables como el almidón de maíz o la caña de azúcar. Una alternativa sustentable.</p>
+            </div>
+            <div class="why-card">
+                <h4>🏭 100% Producción Propia</h4>
+                <p>Controlamos todo el proceso de fabricación e impresión 3D de punta a punta, garantizando máxima precisión, solidez y un control de calidad riguroso en cada pieza.</p>
+            </div>
+            <div class="why-card">
+                <h4>👩‍🍳 Multiuso y Versátil</h4>
+                <p>Ideales para galletas, pasta de goma, fondant, porcelana fría y masas de modelar. <strong>Tip:</strong> Para repostería, recomendamos colocar un film protector sobre la masa antes de cortar.</p>
+            </div>
+        </div>
+
+        <!-- Sección de Envíos y Pagos -->
+        <h2 id="envios" class="section-title">Envíos y Pagos</h2>
+        <div class="info-cards">
+            <!-- Tarjeta Pagos -->
+            <div class="info-card">
+                <h4>💳 Medios de Pago</h4>
+                <ul>
+                    <li><strong>• Transferencia Bancaria / Efectivo:</strong> 10% de descuento.</li>
+                    <li><strong>• Tarjetas de Crédito / Débito:</strong> 1 pago con interés con Mercado Pago.</li>
+                </ul>
+            </div>
+            
+            <!-- Tarjeta Envíos -->
+            <div class="info-card">
+                <h4>📦 Envíos & Entregas</h4>
+                <ul>
+                    <li><strong>• Mensajería:</strong> Envíos dentro de CABA.</li>
+                    <li><strong>• Retiro Gratis:</strong> En punto de retiro, Versalles (coordinación previa).</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Banner de Contacto -->
+        <div class="contact-banner">
+            <h3>✨ ¿Buscás un diseño personalizado o un color especial? ✨</h3>
+            <p>Hacemos impresiones 3D a pedido, recuerdos para eventos y regalos corporativos. ¡Consultanos!</p>
+            <p><strong>Instagram:</strong> Próximamente... | <strong>WhatsApp:</strong> +54 9 11 3571-2260</p>
+        </div>
+
+    </div>
+
+    <!-- Modal Lightbox / Visor de Imágenes -->
+    <div id="lightbox" class="lightbox">
+        <div class="lightbox-content">
+            <button class="lightbox-close" id="lightboxClose">&times;</button>
+            <button class="lightbox-nav lightbox-prev" id="lightboxPrev">&#10094;</button>
+            <img src="" alt="Imagen ampliada" class="lightbox-img" id="lightboxImg">
+            <button class="lightbox-nav lightbox-next" id="lightboxNext">&#10095;</button>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. Lógica para generar los enlaces de WhatsApp dinámicamente ---
+        const numeroWhatsApp = "5491178193227"; // Código de país +54 9 seguido del número
+        
+        // Seleccionamos todos los botones que tienen la clase 'btn-whatsapp'
+        document.querySelectorAll('.btn-whatsapp').forEach(btn => {
+            // Buscamos el título del producto dentro del mismo contenedor (.product-details)
+            const productTitle = btn.parentElement.querySelector('.product-title').innerText;
+            
+            // Armamos la plantilla del mensaje con espacios en blanco para que el cliente la complete
+            const mensajePlantilla = `¡Hola! Me gustaría hacer un pedido relacionado con: *${productTitle}*.\n\nPara agilizar el pedido, te dejo los siguientes detalles:\n- Nombre y Apellido: \n- Dirección de envío o sucursal de retiro: \n- Medio de pago elegido: \n- Cantidad de cortadores: \n- Modelos específicos: `;
+            
+            // Codificamos el mensaje para que sea válido en una URL (respeta los saltos de línea y espacios)
+            const mensajeCodificado = encodeURIComponent(mensajePlantilla);
+            
+            // Asignamos el enlace generado al botón
+            btn.href = `https://wa.me/${numeroWhatsApp}?text=${mensajeCodificado}`;
+            btn.target = "_blank"; // Abre WhatsApp en una pestaña nueva
+        });
+
+        // --- 2. Lógica del Visor de Imágenes (Lightbox) ---
+        let currentGallery = [];
+        let currentIndex = 0;
+
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const prevBtn = document.getElementById('lightboxPrev');
+        const nextBtn = document.getElementById('lightboxNext');
+        const closeBtn = document.getElementById('lightboxClose');
+
+        // Asignar evento click a todas las imágenes del catálogo
+        document.querySelectorAll('.product-image-grid img').forEach(img => {
+            img.addEventListener('click', (e) => {
+                const grid = e.target.closest('.product-image-grid');
+                const imagesInGrid = Array.from(grid.querySelectorAll('img'));
+                
+                // Obtener las rutas de las 4 imágenes de esa publicación
+                currentGallery = imagesInGrid.map(image => image.src);
+                // Indice de la imagen cliqueada
+                currentIndex = imagesInGrid.indexOf(e.target);
+
+                openLightbox();
+            });
+        });
+
+        function openLightbox() {
+            updateImage();
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto'; 
+        }
+
+        function updateImage() {
+            lightboxImg.src = currentGallery[currentIndex];
+        }
+
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % currentGallery.length;
+            updateImage();
+        }
+
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
+            updateImage();
+        }
+
+        nextBtn.addEventListener('click', nextImage);
+        prevBtn.addEventListener('click', prevImage);
+        closeBtn.addEventListener('click', closeLightbox);
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox || e.target.classList.contains('lightbox-content')) {
+                closeLightbox();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (!lightbox.classList.contains('active')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowRight') nextImage();
+            if (e.key === 'ArrowLeft') prevImage();
+        });
+    </script>
+
+</body>
+</html>
